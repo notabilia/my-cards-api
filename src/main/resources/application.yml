@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: my-cards-full-stack-challenge
+  resources:
+    cache:
+      period: 60m
