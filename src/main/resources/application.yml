@@ -1,6 +1,6 @@
 spring:
   application:
-    name: my-cards-full-stack-challenge
+    name: my-cards-backend
   resources:
     cache:
       period: 60m
