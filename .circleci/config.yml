@@ -1,0 +1,33 @@
+version: 2
+
+jobs:
+  test_and_build:
+    working_directory: ~/my-cards-backend
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run:
+          name: Echo branch name
+          command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: Echo app version
+          command: echo $(cat VERSION.txt)
+      - run:
+          name: Package
+          command: mvn clean verify -Dversion=$(cat VERSION.txt)
+      - run:
+          name: Move app to upload directory
+          command: |
+              mkdir -pv ~/my-cards-backend/dist
+              cp -v ~/my-cards-backend/target/my-cards-backend-$(cat VERSION.txt).jar ~/my-cards-backend/dist
+      - store_test_results:
+          path: ~/my-cards-backend/target/surefire-reports
+      - store_artifacts:
+          path: ~/my-cards-backend/dist
+
+workflows:
+  version: 2
+  test_and_build:
+    jobs:
+      - test_and_build
