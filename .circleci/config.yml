@@ -9,6 +9,7 @@ jobs:
 
     environment:
       MAVEN_OPTS: -Xmx3200m
+      APP_VERSION: $(cat VERSION.txt)
 
     steps:
       - checkout
@@ -17,7 +18,7 @@ jobs:
           command: echo ${CIRCLE_BRANCH}
       - run:
           name: Echo app version
-          command: echo $(cat VERSION.txt)
+          command: echo ${APP_VERSION}
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -33,13 +34,21 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run:
           name: Package
-          command: mvn verify -Dversion=$(cat VERSION.txt)
+          command: mvn verify -Dversion=${APP_VERSION}
+      - run:
+          name: Report
+          command: |
+            mvn surefire-report:report-only -Dversion=${APP_VERSION}
+            mvn site -DgenerateReports=false -Dversion=${APP_VERSION}
+          when: always
       - run:
           name: Move app to upload directory
           command: |
             mkdir -pv ~/my-cards-backend/dist
-            cp -v ~/my-cards-backend/target/my-cards-backend-$(cat VERSION.txt).jar ~/my-cards-backend/dist
+            cp -v ~/my-cards-backend/target/my-cards-backend-${APP_VERSION}.jar ~/my-cards-backend/dist
       - store_test_results:
           path: ~/my-cards-backend/target/surefire-reports
+      - store_artifacts:
+          path: ~/my-cards-backend/target/site
       - store_artifacts:
           path: ~/my-cards-backend/dist

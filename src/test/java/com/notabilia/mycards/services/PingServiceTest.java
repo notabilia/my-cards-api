@@ -2,34 +2,34 @@ package com.notabilia.mycards.services;
 
 import com.notabilia.mycards.models.Ping;
 import com.notabilia.mycards.utils.VersionSupplier;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Duration;
 import java.time.Instant;
 
-import static org.mockito.Mockito.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class PingServiceTest {
+@RunWith(MockitoJUnitRunner.class)
+public class PingServiceTest {
 
     @Mock
     private VersionSupplier mockVersionSupplier;
 
     private PingService service;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         this.service = new PingService(this.mockVersionSupplier);
     }
 
     @Test
-    void getPingCallsVersionSupplier() {
+    public void getPingCallsVersionSupplier() {
         // Given
 
         // When
@@ -40,7 +40,7 @@ class PingServiceTest {
     }
 
     @Test
-    void getPingReturnsPingWithCorrectVersion() {
+    public void getPingReturnsPingWithCorrectVersion() {
         // Given
         String version = "local";
 
@@ -53,7 +53,7 @@ class PingServiceTest {
     }
 
     @Test
-    void getPingReturnsPingWithCorrectDate() {
+    public void getPingReturnsPingWithCorrectDate() {
         // Given
         when(this.mockVersionSupplier.get()).thenReturn("local");
 

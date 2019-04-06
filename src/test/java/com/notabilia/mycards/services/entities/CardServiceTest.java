@@ -2,13 +2,11 @@ package com.notabilia.mycards.services.entities;
 
 import com.notabilia.mycards.models.entities.Card;
 import com.notabilia.mycards.repositories.CardRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -16,163 +14,124 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class CardServiceTest {
+@RunWith(MockitoJUnitRunner.class)
+public class CardServiceTest {
+
+    private class TestException extends RuntimeException {}
 
     @Mock
     private CardRepository mockCardRepository;
 
     private CardService service;
 
-    @Nested
-    class GetAll {
-
-        @BeforeEach
-        void setUp() {
-            service = new CardService(mockCardRepository);
-        }
-
-        @Test
-        void shouldCallRepositoryFindAll() {
-            // Given
-
-            // When
-            service.getAll();
-
-            // Then
-            verify(mockCardRepository, times(1)).findAll();
-        }
-
-        @Test
-        void onExceptionShouldThrow() {
-            // Given
-            String message = "hello world";
-            Exception e = new RuntimeException(message);
-
-            // When
-            when(mockCardRepository.findAll()).thenThrow(e);
-
-            // Then
-            Exception thrown = assertThrows(Exception.class, () -> service.getAll());
-            assertTrue(thrown.getLocalizedMessage().contains(message));
-        }
-
-        @Test
-        void shouldReturnAllCards() {
-            // Given
-            List<Card> cards = Arrays.asList(new Card(), new Card(), new Card());
-
-            // When
-            when(mockCardRepository.findAll()).thenReturn(cards);
-            Iterable<Card> response = service.getAll();
-
-            // Then
-            assertThat(response.spliterator().getExactSizeIfKnown(), is(equalTo((long) cards.size())));
-        }
+    @Before
+    public void setUp() {
+        service = new CardService(mockCardRepository);
     }
 
-    @Nested
-    class GetOne {
+    @Test
+    public void shouldCallRepositoryFindAll() {
+        // Given
 
-        @BeforeEach
-        void setUp() {
-            service = new CardService(mockCardRepository);
-        }
+        // When
+        service.getAll();
 
-        @Test
-        void shouldCallRepositoryFindById() {
-            // Given
-            Integer id = 1;
-
-            // When
-            when(mockCardRepository.findById(anyInt())).thenReturn(Optional.of(new Card(id)));
-            service.getOne(id);
-
-            // Then
-            verify(mockCardRepository, times(1)).findById(eq(id));
-        }
-
-        @Test
-        void onEmptyShouldThrowException() {
-            // Given
-
-            // When
-            when(mockCardRepository.findById(anyInt())).thenReturn(Optional.empty());
-
-            // Then
-            assertThrows(EntityNotFoundException.class, () -> service.getOne(1));
-        }
-
-        @Test
-        void shouldReturnCorrectCard() {
-            // Given
-            Integer id = 1;
-            Card message = new Card(id);
-
-            // When
-            when(mockCardRepository.findById(anyInt())).thenReturn(Optional.of(message));
-            Card response = service.getOne(id);
-
-            // Then
-            assertThat(response.getId(), is(equalTo(id)));
-        }
+        // Then
+        verify(mockCardRepository, times(1)).findAll();
     }
 
-    @Nested
-    class CreateOne {
+    @Test(expected = TestException.class)
+    public void onExceptionShouldThrow() {
+        // Given
+        when(mockCardRepository.findAll()).thenThrow(new TestException());
 
-        @Mock
-        Card mockCard;
+        // When
+        service.getAll();
 
-        @BeforeEach
-        void setUp() {
-            service = new CardService(mockCardRepository);
-        }
+        // Then
+        // Exception expected
+    }
 
-        @Test
-        void onExistenceShouldThrowException() {
-            // Given
-            Integer id = 1;
-            Card message = new Card(id);
+    @Test
+    public void shouldReturnAllCards() {
+        // Given
+        List<Card> cards = Arrays.asList(new Card(), new Card(), new Card());
 
-            // When
-            when(mockCardRepository.existsById(eq(id))).thenReturn(true);
+        // When
+        when(mockCardRepository.findAll()).thenReturn(cards);
+        Iterable<Card> response = service.getAll();
 
-            // Then
-            assertThrows(EntityExistsException.class, () -> service.createOne(message));
-        }
+        // Then
+        assertThat(response.spliterator().getExactSizeIfKnown(), is(equalTo((long) cards.size())));
+    }
 
-        @Test
-        void shouldCallRepositorySave() {
-            // Given
-            Card message = new Card(null);
+    @Test
+    public void shouldCallRepositoryFindById() {
+        // Given
+        Integer id = 1;
+        when(mockCardRepository.findById(anyInt())).thenReturn(Optional.of(new Card()));
 
-            // When
-            service.createOne(message);
+        // When
+        service.getOne(id);
 
-            // Then
-            verify(mockCardRepository, times(1)).save(eq(message));
-        }
+        // Then
+        verify(mockCardRepository, times(1)).findById(eq(id));
+    }
 
-        @Test
-        void shouldReturnCorrectCard() {
-            // Given
-            Integer id = 1;
-            Card message = new Card(id);
+    @Test(expected = EntityNotFoundException.class)
+    public void onEmptyShouldThrowException() {
+        // Given
+        when(mockCardRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-            // When
-            Mockito.lenient().when(mockCardRepository.save(Mockito.any(Card.class))).thenReturn(message);
-            Card response = service.createOne(message);
+        // When
+        service.getOne(1);
 
-            // Then
-            assertThat(response, is(equalTo(message)));
-        }
+        // Then
+        // Exception expected
+    }
+
+    @Test
+    public void shouldReturnCorrectCard() {
+        // Given
+        Integer id = 1;
+        Card card = new Card(id);
+        when(mockCardRepository.findById(anyInt())).thenReturn(Optional.of(card));
+
+        // When
+        Card response = service.getOne(id);
+
+        // Then
+        assertThat(response.getId(), is(equalTo(id)));
+    }
+
+    @Test(expected = EntityExistsException.class)
+    public void onExistenceShouldThrowException() {
+        // Given
+        Integer id = 1;
+        Card card = new Card(id);
+        when(mockCardRepository.existsById(eq(id))).thenReturn(true);
+
+        // When
+        service.createOne(card);
+
+        // Then
+        // Exception expected
+    }
+
+    @Test
+    public void shouldCallRepositorySave() {
+        // Given
+        Card card = new Card(null);
+
+        // When
+        service.createOne(card);
+
+        // Then
+        verify(mockCardRepository, times(1)).save(eq(card));
     }
 }

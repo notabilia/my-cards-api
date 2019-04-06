@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {
         "Ping Controller"
 })
+public
 class PingController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PingController.class);
@@ -29,14 +30,14 @@ class PingController {
     private final PingService service;
 
     @Autowired
-    PingController(final PingService service) {
+    public PingController(final PingService service) {
         this.service = service;
     }
 
     @GetMapping(path = "/ping", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Perform health-check", response = Ping.class)
     @ApiResponse(code = 200, message = "[Successful] Request OK, system is healthy")
-    ResponseEntity<Ping> getPing() {
+    public ResponseEntity<Ping> getPing() {
         LOGGER.info("PingController getPing()");
 
         return new ResponseEntity<>(this.service.getPing(), HttpStatus.OK);
