@@ -62,17 +62,17 @@ public class CreateCardsSteps {
 
     @Then("the cards purchase day should be equal to {int}")
     public void theCardsPurchaseDayShouldBeEqualTo(int day) {
-        assertThat(this.card.getPurchaseLocalDate().getDayOfMonth(), is(equalTo(day)));
+        assertThat(this.card.getPurchaseDate().getDayOfMonth(), is(equalTo(day)));
     }
 
     @And("the cards purchase month should be equal to {int}")
     public void theCardsPurchaseMonthShouldBeEqualTo(int month) {
-        assertThat(this.card.getPurchaseLocalDate().getMonthValue(), is(equalTo(month)));
+        assertThat(this.card.getPurchaseDate().getMonthValue(), is(equalTo(month)));
     }
 
     @And("the cards purchase year should be equal to {int}")
     public void theCardsPurchaseYearShouldBeEqualTo(int year) {
-        assertThat(this.card.getPurchaseLocalDate().getYear(), is(equalTo(year)));
+        assertThat(this.card.getPurchaseDate().getYear(), is(equalTo(year)));
     }
 
     @When("a user creates a card with a merchant attribute of {string}")

@@ -19,7 +19,7 @@ public class Card implements EntityModel<Integer> {
     private Integer id;
 
     private String description;
-    private LocalDate purchaseLocalDate;
+    private LocalDate purchaseDate;
     private String merchant;
     private Double price;
 
@@ -33,13 +33,13 @@ public class Card implements EntityModel<Integer> {
     public Card(
             Integer id,
             String description,
-            LocalDate purchaseLocalDate,
+            LocalDate purchaseDate,
             String merchant,
             Double price
     ) {
         this.id = id;
         this.description = description;
-        this.purchaseLocalDate = purchaseLocalDate;
+        this.purchaseDate = purchaseDate;
         this.merchant = merchant;
         this.price = price;
     }
@@ -57,12 +57,12 @@ public class Card implements EntityModel<Integer> {
         this.description = descrption;
     }
 
-    public LocalDate getPurchaseLocalDate() {
-        return purchaseLocalDate;
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
     }
 
-    public void setPurchaseLocalDate(LocalDate purchaseLocalDate) {
-        this.purchaseLocalDate = purchaseLocalDate;
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
     public String getMerchant() {
