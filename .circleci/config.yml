@@ -9,10 +9,11 @@ jobs:
 
     environment:
       MAVEN_OPTS: -Xmx3200m
-      APP_VERSION: $(cat VERSION.txt)
 
     steps:
       - checkout
+      - run:
+          command: echo 'export APP_VERSION=$(cat VERSION.txt)' >> ${BASH_ENV}
       - run:
           name: Echo branch name
           command: echo ${CIRCLE_BRANCH}
