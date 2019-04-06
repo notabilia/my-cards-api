@@ -9,6 +9,8 @@ public class Ping implements Model {
     private Instant date;
     private String version;
 
+    public Ping() {}
+
     public Ping(Instant date, String version) {
         this.date = date;
         this.version = version;

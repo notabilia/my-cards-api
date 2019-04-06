@@ -58,13 +58,13 @@ public class SwaggerConfiguration {
 
         private ApiInfo getApiInfo(String version) {
             return new ApiInfo(
-                    "app REST API",
-                    "REST API to access app information",
+                    "My Cards - REST API",
+                    "REST API to access My Cards",
                     version,
-                    "https://github.com/zygopleural/app",
-                    new Contact("app support", "https://github.com/zygopleural/app", "31384409+zygopleural@users.noreply.github.com"),
-                    "MIT Licence",
-                    "https://github.com/zygopleural/app/blob/master/LICENSE",
+                    "https://github.com/notabilia/my-cards-api",
+                    new Contact("Notabilia support", "https://github.com/notabilia/my-cards-api/issues", "developers@notabilia.dev"),
+                    "",
+                    "",
                     Collections.emptySet()
             );
         }

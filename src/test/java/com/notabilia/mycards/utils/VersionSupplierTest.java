@@ -1,19 +1,17 @@
 package com.notabilia.mycards.utils;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
-@ExtendWith(MockitoExtension.class)
-class VersionSupplierTest {
+public class VersionSupplierTest {
 
     private VersionSupplier supplier;
 
     @Test
-    void getShouldReturnDefaultVersionWhenNullImplementationVersion() {
+    public void getShouldReturnDefaultVersionWhenNullImplementationVersion() {
         // Given
         this.supplier = new VersionSupplier(null);
 
@@ -25,7 +23,7 @@ class VersionSupplierTest {
     }
 
     @Test
-    void getShouldReturnDefaultVersionWhenEmptyImplementationVersion() {
+    public void getShouldReturnDefaultVersionWhenEmptyImplementationVersion() {
         // Given
         this.supplier = new VersionSupplier("");
 
@@ -37,7 +35,7 @@ class VersionSupplierTest {
     }
 
     @Test
-    void getShouldReturnCorrectVersion() {
+    public void getShouldReturnCorrectVersion() {
         // Given
         String implementationVersion = "1.0.0";
         this.supplier = new VersionSupplier(implementationVersion);
