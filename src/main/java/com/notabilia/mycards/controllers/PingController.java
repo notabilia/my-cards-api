@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/1.0")
 @Api(tags = {
-        "Ping Controller"
+        "Heath Check"
 })
 public
 class PingController {

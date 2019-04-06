@@ -21,7 +21,7 @@ import javax.persistence.EntityNotFoundException;
 @RestController
 @RequestMapping("/api/1.0")
 @Api(tags = {
-        "Card Controller"
+        "Manage Cards"
 })
 public class CardController implements EntityController<Card, Integer> {
 
@@ -76,7 +76,7 @@ public class CardController implements EntityController<Card, Integer> {
     }
 
     @PostMapping(path = "/card", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Create a cards")
+    @ApiOperation(value = "Create a card")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "[Successful] Request OK, card created"),
             @ApiResponse(code = 400, message = "[Failure] Request BAD, card already exists"),
