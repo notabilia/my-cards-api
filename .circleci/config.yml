@@ -13,6 +13,7 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Setup environment variables
           command: echo 'export APP_VERSION=$(cat VERSION.txt)' >> ${BASH_ENV}
       - run:
           name: Echo branch name
